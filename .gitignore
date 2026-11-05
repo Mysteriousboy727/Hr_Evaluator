@@ -1,0 +1,21 @@
+﻿# secrets and data - never commit
+.env
+backend/.env
+backend/hr.db
+*.db
+backend/uploads/
+backups/
+
+# python
+venv/
+__pycache__/
+*.pyc
+
+# node
+node_modules/
+frontend/dist/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/

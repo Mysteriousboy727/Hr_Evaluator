@@ -1,0 +1,17 @@
+QUESTIONS = [
+    {"key": "intro", "text": "Briefly introduce yourself.", "type": "text"},
+    {"key": "status", "text": "Are you currently studying, working, or looking for a job?", "type": "select",
+     "options": ["Studying", "Working", "Looking for a job"]},
+    {"key": "experience", "text": "What relevant experience, projects or skills do you have for this role?", "type": "text"},
+    {"key": "location", "text": "Are you comfortable with the job location and work mode listed?", "type": "select",
+     "options": ["Yes", "No"]},
+    {"key": "terms", "text": "Are you comfortable with the working hours and the stipend offered?", "type": "select",
+     "options": ["Yes", "No"]},
+    {"key": "start_date", "text": "When can you join?", "type": "date"},
+    {"key": "months", "text": "How many months can you commit to the internship?", "type": "number"},
+    {"key": "college_commitments", "text": "Do you have classes, exams or attendance requirements that could affect your availability?", "type": "text"},
+    {"key": "noc", "text": "Can you obtain college approval / NOC if required?", "type": "select",
+     "options": ["Yes", "Not required", "No"]},
+    {"key": "candidate_questions", "text": "What would you like to know about the company, role or selection process? (optional)",
+     "type": "text", "optional": True},
+]
