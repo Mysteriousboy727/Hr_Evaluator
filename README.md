@@ -1,9 +1,41 @@
+﻿# Hr_Evaluator
 
-# Hr_Evaluator
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
 
-An online internship hiring portal that connects students and HR teams through an automated recruitment workflow. Students can explore internship opportunities, apply with resumes, and complete screening tests. HR users can publish jobs, evaluate applications, manage assessments, and schedule interviews.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20App-1b64d6?style=for-the-badge)](https://akshara-hiring.vercel.app)
+[![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://hr-evaluator-api.onrender.com/docs)
+![API Status](https://img.shields.io/website?url=https%3A%2F%2Fhr-evaluator-api.onrender.com%2Fapi%2Fhealth&label=API&up_message=online&down_message=unavailable&style=for-the-badge)
 
-Applications receive an automated score out of 100. Shortlisted candidates complete a timed assessment, and successful candidates can be assigned an HR interview slot with a Jitsi video-call link.
+**Hr_Evaluator** is an online internship recruitment and evaluation platform with separate student and HR dashboards. Students can discover opportunities, submit applications, and take timed screening tests. HR users can publish opportunities, manage assessments, review candidates, and schedule interviews.
+
+The platform evaluates applications using a rule-based scoring engine, automatically processes screening-test results, and supports interview scheduling with Jitsi Meet links, email notifications, and calendar invitations.
+
+---
+
+## Live Demo
+
+| Service | URL |
+|---|---|
+| Web application | https://akshara-hiring.vercel.app |
+| Backend API | https://hr-evaluator-api.onrender.com |
+| Swagger API documentation | https://hr-evaluator-api.onrender.com/docs |
+| Health check | https://hr-evaluator-api.onrender.com/api/health |
+
+> **Deployment note:** The backend is hosted on Render. If using a free instance, it may sleep after inactivity, resulting in a delay on the first request. SQLite and local file uploads should be treated as demonstration storage unless persistent storage and backups have been configured.
+
+### Try the application
+
+1. Open the web application.
+2. Register a new account with the **Student** role.
+3. Browse available internship opportunities and submit an application.
+4. To access the HR dashboard, register using the **HR** role and the private signup code.
+5. Use the HR dashboard to create opportunities, configure screening tests, and manage applicants.
 
 ---
 
@@ -18,150 +50,158 @@ Applications receive an automated score out of 100. Shortlisted candidates compl
 - [Technology Stack](#technology-stack)
 - [Project Structure](#project-structure)
 - [Installation and Setup](#installation-and-setup)
+- [Environment Variables](#environment-variables)
+- [Deployment](#deployment)
 - [Test Question Format](#test-question-format)
 - [API Overview](#api-overview)
+- [Security Considerations](#security-considerations)
 - [Known Limitations](#known-limitations)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
 
 ---
 
 ## Features
 
-### Student Module
-- Student registration and login.
+### Student Features
+
+- Student registration and authentication.
 - Browse available internship opportunities.
-- Apply for internships with resume uploads.
-- Submit skills, college details, and screening answers.
+- View role descriptions, required skills, location, stipend, and duration.
+- Apply for opportunities with resume uploads.
+- Submit skills, education details, and screening answers.
 - Optional voice input using the browser Web Speech API.
-- View application scores and statuses.
-- Complete timed multiple-choice assessments.
-- View interview schedules and Jitsi meeting links.
-- Receive in-app notifications and email updates.
+- View application scores and application status.
+- Take timed multiple-choice screening tests.
+- View test results.
+- Receive interview scheduling notifications.
+- Confirm interview attendance.
+- Access interview meeting links.
+- Receive email notifications and calendar invitations.
 
-### HR Module
-- HR registration using a signup code.
-- Create and manage internship opportunities.
-- Specify required skills, location, stipend, duration, and shortlist threshold.
-- View and evaluate student applications.
-- Upload screening questions through PDF, TXT, or CSV files.
-- Add assessment questions manually.
-- Review application scores.
-- Manually shortlist or reject candidates.
-- Manage interview slots.
-- Schedule interviews automatically for successful candidates.
+### HR Features
 
-### Automated Recruitment
-- Resume parsing and keyword-based evaluation.
-- Automatic application scoring out of 100.
-- Knockout conditions for eligibility.
-- Automatic shortlisting based on configurable thresholds.
-- Timed online assessments.
+- HR registration protected by a private signup code.
+- Create, update, and manage internship opportunities.
+- Define required skills and application evaluation thresholds.
+- Configure internship details such as location, stipend, and duration.
+- Upload screening questions using PDF, TXT, or CSV files.
+- Add screening questions manually.
+- Review candidate applications and evaluation scores.
+- Shortlist or reject candidates manually.
+- Configure interview availability slots.
+- Automatically schedule eligible candidates into available slots.
+- View candidate application and test results.
+- Receive notifications about candidate activity.
+
+### Automated Features
+
+- Rule-based resume and skills evaluation.
+- Screening-answer evaluation.
+- Knockout-condition checking.
+- Automatic application status updates.
 - Server-side test evaluation.
-- Automatic interview slot allocation.
-- Jitsi video meeting link generation.
-- Email notifications and calendar invitations.
-- Interview reminders approximately one hour before the scheduled time.
+- Interview slot allocation.
+- Email notifications.
+- Calendar invitations using `.ics` files.
+- Interview reminders.
 
 ---
 
 ## System Architecture
 
-The application follows a frontend-backend architecture. React communicates with FastAPI through REST APIs. FastAPI handles authentication, application processing, scoring, assessments, scheduling, and notifications.
+The application follows a frontend-backend architecture. The React frontend communicates with the FastAPI backend through REST API endpoints.
 
 ```mermaid
 flowchart TB
-
-    subgraph FRONTEND["Frontend - React + Vite"]
+    subgraph FRONTEND["Frontend - React + Vite (Vercel)"]
         direction TB
-        F1["Authentication<br/>Login and Registration"]
-        F2["Student Dashboard<br/>Browse Jobs and Apply"]
-        F3["HR Dashboard<br/>Post Jobs and Manage Applicants"]
-        F4["Assessment Interface<br/>Timed MCQ Test"]
-        F5["Interview Dashboard<br/>Meeting Details"]
-        F6["Notification Center<br/>Updates and Alerts"]
+        A["Authentication"]
+        B["Student Dashboard"]
+        C["HR Dashboard"]
+        D["Application Form"]
+        E["Test Runner"]
+        F["Interview Interface"]
+        G["Notifications"]
     end
 
-    subgraph BACKEND["Backend - FastAPI"]
+    subgraph BACKEND["Backend - FastAPI (Render)"]
         direction TB
-        B1["Authentication Router"]
-        B2["Jobs Router"]
-        B3["Applications Router"]
-        B4["Assessment Router"]
-        B5["Question Upload Parser"]
-        B6["Application Scoring Engine"]
-        B7["Recruitment Services"]
-        B8["Interview Scheduling"]
-        B9["Notification Service"]
-        B10["Reminder Scheduler"]
+        H["Authentication Router"]
+        I["Jobs Router"]
+        J["Applications Router"]
+        K["Tests Router"]
+        L["Question Upload Router"]
+        M["Scoring Engine"]
+        N["Application Services"]
+        O["Notification Services"]
+        P["Interview Scheduling"]
+        Q["Reminder Service"]
     end
 
-    subgraph STORAGE["Database and File Storage"]
-        direction TB
-        D1[("SQLite Database<br/>hr.db")]
-        D2["Resume Uploads"]
-        D3["Assessment Questions"]
+    subgraph STORAGE["Data Storage"]
+        R[("SQLite Database")]
+        S["Resume Uploads"]
     end
 
     subgraph EXTERNAL["External Services"]
-        direction TB
-        E1["SMTP Email Service"]
-        E2["Jitsi Meet"]
-        E3["Calendar Invitation<br/>ICS File"]
+        T["SMTP Email Service"]
+        U["Jitsi Meet"]
+        V["Calendar Invitation (.ics)"]
+        W["Browser Web Speech API"]
     end
 
-    FRONTEND -->|"REST API / Bearer Token"| BACKEND
+    A --> H
+    B --> I
+    B --> J
+    C --> I
+    C --> J
+    D --> J
+    E --> K
+    F --> P
+    G --> O
 
-    F1 --> B1
-    F2 --> B2
-    F2 --> B3
-    F3 --> B2
-    F3 --> B3
-    F4 --> B4
-    F5 --> B8
-    F6 --> B9
+    J --> M
+    J --> N
+    K --> N
+    L --> K
+    N --> P
+    N --> O
+    P --> R
+    Q --> O
 
-    B3 --> B6
-    B3 --> B7
-    B4 --> B5
-    B4 --> B7
-    B7 --> B8
-    B7 --> B9
-    B8 --> D1
-    B9 --> D1
-    B10 --> B9
+    H --> R
+    I --> R
+    J --> R
+    K --> R
+    J --> S
 
-    B1 --> D1
-    B2 --> D1
-    B3 --> D1
-    B3 --> D2
-    B4 --> D3
-
-    B9 --> E1
-    B8 --> E2
-    B8 --> E3
-    B10 --> E1
+    O --> T
+    P --> U
+    P --> V
+    D -. Optional voice input .-> W
 ```
 
 ### Architecture Components
 
 | Component | Responsibility |
 |---|---|
-| React + Vite | User interface and dashboards |
-| FastAPI | Backend API and business logic |
-| Authentication Router | Login, registration, and token management |
-| Jobs Router | Internship posting and slot management |
-| Applications Router | Application submission and decisions |
-| Scoring Engine | Automated application evaluation |
-| Assessment Module | Question management and test evaluation |
-| Recruitment Services | Shortlisting, scheduling, and notifications |
-| SQLite | Persistent application data |
-| SMTP | Email communication |
-| Jitsi Meet | Video interview meetings |
+| React + Vite | Frontend interface and dashboards |
+| FastAPI | REST API and backend business logic |
+| SQLAlchemy | Database ORM and persistence |
+| SQLite | Application data storage |
+| Scoring Engine | Rule-based application evaluation |
+| PDF/TXT/CSV Parser | Extract screening questions and resume text |
+| SMTP | Email notifications |
+| Jitsi Meet | Interview meeting links |
+| `.ics` | Calendar invitations |
+| Web Speech API | Optional browser-based voice input |
 
 ---
 
 ## End-to-End Workflow
 
-This sequence diagram illustrates how HR and students interact with the platform.
+The following sequence describes the main recruitment workflow.
 
 ```mermaid
 sequenceDiagram
@@ -172,255 +212,265 @@ sequenceDiagram
     participant UI as React Frontend
     participant API as FastAPI Backend
     participant DB as SQLite Database
-    participant Mail as Email Service
+    participant Email as Email Service
+    participant Jitsi as Jitsi Meet
 
-    HR->>UI: Register and login
-    UI->>API: Authentication request
-    API->>DB: Validate HR account
-    DB-->>API: Account details
-    API-->>UI: Authentication token
+    HR->>UI: Create internship opportunity
+    HR->>UI: Configure screening questions
+    HR->>UI: Configure interview slots
 
-    HR->>UI: Create internship role
-    HR->>UI: Upload screening questions
-    HR->>UI: Add interview slots
+    UI->>API: Submit role and assessment data
+    API->>DB: Store role, questions and slots
+    DB-->>API: Confirm saved data
 
-    UI->>API: Submit job and assessment details
-    API->>DB: Store job, questions and slots
-    DB-->>API: Confirmation
-    API-->>UI: Job created successfully
+    Student->>UI: Register and log in
+    Student->>UI: Submit internship application
+    UI->>API: Submit resume and application details
 
-    Student->>UI: Register and login
-    Student->>UI: Browse internship roles
-    Student->>UI: Submit application and resume
-
-    UI->>API: POST /jobs/{id}/apply
     API->>API: Extract resume text
     API->>API: Calculate application score
-    API->>DB: Save application and status
-    DB-->>API: Application saved
+    API->>API: Check knockout conditions
+    API->>DB: Save application and score
 
-    alt Score meets shortlist threshold
-        API->>Mail: Notify student about assessment
-        Mail-->>Student: Assessment notification
-
-        Student->>UI: Start timed assessment
-        UI->>API: Start test request
-        API->>DB: Retrieve questions
-        DB-->>API: Assessment questions
-
+    alt Application shortlisted
+        API->>Email: Send screening-test notification
+        Student->>UI: Start timed screening test
+        UI->>API: Request test questions
+        API-->>UI: Return test questions
         Student->>UI: Submit answers
-        UI->>API: Submit assessment
-        API->>API: Evaluate answers
-        API->>DB: Save assessment result
+        UI->>API: Submit test answers
+        API->>API: Evaluate test answers
+        API->>DB: Save test result
 
-        alt Assessment passed
-            API->>DB: Find earliest available slot
-            DB-->>API: Available interview slot
-            API->>API: Generate Jitsi meeting link
-            API->>DB: Save interview details
-            API->>Mail: Send interview details and ICS invite
-            Mail-->>Student: Interview confirmation
-            Mail-->>HR: Interview notification
-        else Assessment failed
-            API->>Mail: Send assessment result notification
+        alt Test passed
+            API->>API: Find available interview slot
+            API->>DB: Book interview slot
+            API->>Jitsi: Generate or assign meeting link
+            API->>Email: Send interview details and calendar invite
+            API-->>UI: Return interview information
+        else Test failed
+            API->>Email: Send test result notification
         end
 
-    else Score requires HR review
-        API->>Mail: Notify HR for manual review
+    else HR review required
+        API->>Email: Notify HR for manual review
 
-    else Knockout or low score
-        API->>Mail: Notify student about application status
+    else Application not shortlisted
+        API->>Email: Send application status notification
     end
 
-    Student->>UI: Confirm interview attendance
-    UI->>API: Confirm attendance
-    API->>DB: Update confirmation status
-
-    API->>Mail: Send interview reminder
-    HR->>Student: Conduct interview through Jitsi
+    Student->>UI: View application and interview status
+    HR->>UI: Review candidate details
+    Student->>Jitsi: Join interview
+    HR->>Jitsi: Join interview
 ```
 
 ---
 
 ## Application Status Flow
 
-The following diagram explains the application evaluation and recruitment process.
+The following diagram represents the application's evaluation and interview progression.
 
 ```mermaid
 flowchart TD
+    A(["Student submits application"])
+    B["Extract resume and evaluate answers"]
+    C["Calculate score out of 100"]
+    D{"Knockout condition?"}
+    E{"Score compared with threshold"}
+    F["Not Shortlisted"]
+    G["Under HR Review"]
+    H["Shortlisted"]
+    I{"At least 3 test questions available?"}
+    J["Awaiting Test Setup"]
+    K["Test Pending"]
+    L["Student takes timed test"]
+    M{"Test passed?"}
+    N["Test Failed"]
+    O{"Interview slot available?"}
+    P["Awaiting Slot"]
+    Q["Interview Scheduled"]
+    R["Interview Confirmed"]
 
-    A(["Student Applies"]) --> B["Resume Parsing and<br/>Application Scoring"]
+    A --> B --> C --> D
 
-    B --> C{"Knockout Condition?"}
+    D -->|Yes| F
+    D -->|No| E
 
-    C -->|"Yes"| NS["Not Shortlisted"]
-    C -->|"No"| D{"Score Compared<br/>with Threshold"}
+    E -->|At or above threshold| H
+    E -->|Up to 15 points below threshold| G
+    E -->|Below review range| F
 
-    D -->|"At or Above Threshold"| Q{"At Least 3<br/>Questions Available?"}
-    D -->|"Up to 15 Points Below"| UR["Under HR Review"]
-    D -->|"More Than 15 Below"| NS
+    G -->|HR shortlists| H
+    F -->|HR overrides decision| H
 
-    UR -->|"HR Shortlists"| Q
-    NS -->|"HR Override: Shortlist"| Q
+    H --> I
 
-    Q -->|"No"| TS["Awaiting Test Setup"]
-    TS -->|"HR Uploads Questions"| TP["Test Pending"]
+    I -->|No| J
+    J -->|HR adds questions| K
+    I -->|Yes| K
 
-    Q -->|"Yes"| TP
+    K --> L --> M
 
-    TP --> T["Candidate Takes Timed Test"]
-    T --> R{"Test Passed?"}
+    M -->|Yes| O
+    M -->|No| N
 
-    R -->|"Yes"| SL{"Interview Slot Available?"}
-    R -->|"No"| TF["Test Failed"]
+    N -->|HR override| O
 
-    TF -->|"HR Override"| SL
+    O -->|Available| Q
+    O -->|Unavailable| P
+    P -->|HR adds slots| Q
 
-    SL -->|"Yes"| IS["Interview Scheduled"]
-    SL -->|"No"| AS["Awaiting Slot"]
-
-    AS -->|"HR Adds Slots"| IS
-
-    IS --> IC["Interview Confirmed"]
-
-    IC --> END(["Interview Process Ready"])
+    Q --> R
 ```
+
+> The exact transition rules and status names should be kept consistent with the backend implementation.
 
 ---
 
 ## Database Design
 
-The application uses SQLite for persistent storage.
+The application uses SQLAlchemy models to manage users, opportunities, applications, tests, interview slots, and notifications.
 
-The following entity relationship diagram represents the primary database entities and their relationships.
+The following diagram is a conceptual representation of the database relationships.
 
 ```mermaid
 erDiagram
-
-    USERS ||--o{ JOBS : posts
+    USERS ||--o{ JOBS : creates
     USERS ||--o{ APPLICATIONS : submits
     USERS ||--o{ NOTIFICATIONS : receives
 
-    JOBS ||--o{ APPLICATIONS : contains
-    JOBS ||--o{ SLOTS : offers
+    JOBS ||--o{ APPLICATIONS : receives
+    JOBS ||--o{ SLOTS : provides
     JOBS ||--o{ QUESTIONS : contains
-    JOBS ||--|| TEST_CONFIGS : configures
+    JOBS ||--o| TEST_CONFIGS : configures
 
-    APPLICATIONS ||--o| TEST_ATTEMPTS : takes
-    SLOTS |o--o| APPLICATIONS : booked_for
+    APPLICATIONS ||--o| TEST_ATTEMPTS : has
+    SLOTS o|--o| APPLICATIONS : assigned_to
 
     USERS {
         int id PK
         string email
+        string password_hash
         string role
     }
 
     JOBS {
         int id PK
         string title
+        string description
         string required_skills
         int threshold
     }
 
     APPLICATIONS {
         int id PK
+        int student_id FK
+        int job_id FK
         float total_score
         string status
-        datetime slot_start
-        string meeting_link
+        string resume_path
+        datetime created_at
     }
 
     QUESTIONS {
         int id PK
+        int job_id FK
+        string question
         json options
         int correct
     }
 
     TEST_CONFIGS {
         int id PK
+        int job_id FK
         int duration
         int passing_score
     }
 
     TEST_ATTEMPTS {
         int id PK
+        int application_id FK
         float percent
         bool passed
     }
 
     SLOTS {
         int id PK
+        int job_id FK
         datetime start
+        datetime end
     }
 
     NOTIFICATIONS {
         int id PK
+        int user_id FK
         string message
         bool is_read
     }
 ```
 
-**Note:** This diagram describes the documented logical relationships. Check your SQLAlchemy models before treating every illustrated field or relationship as an exact implementation detail.
+> This is a logical overview, not a guarantee that every displayed field or relationship exactly matches the current SQLAlchemy models. Refer to `backend/app/models.py` for the authoritative schema.
 
 ---
 
 ## Application Scoring
 
-Each application is evaluated using a fixed rule-based scoring mechanism.
+Hr_Evaluator currently uses a **rule-based scoring engine**, not an external AI or LLM API.
 
-The total application score is calculated out of 100.
+Each application is evaluated using a score out of 100.
 
-| Evaluation Component | Points | Evaluation Method |
+| Evaluation Category | Maximum Points | Evaluation |
 |---|---:|---|
-| Skill Match | 35 | Required skills found in resume receive full points; skills entered only in the skills field receive half points |
-| Resume Quality | 15 | Resume length (7) and relevant keywords (8) |
-| Introduction and Experience Answers | 24 | Answer length and mention of required skills |
-| Hours, Stipend and Location | 14 | Positive eligibility responses |
-| Commitment and NOC | 12 | Duration commitment and approval availability |
-| **Total** | **100** | |
+| Skill Match | 35 | Required skills found in resume and submitted skills |
+| Resume Quality | 15 | Resume length and relevant keywords |
+| Introduction and Experience | 24 | Screening answers, experience and skill relevance |
+| Hours, Stipend and Location | 14 | Candidate's stated preferences and eligibility |
+| Commitment and NOC | 12 | Commitment duration and approval availability |
+| **Total** | **100** | **Rule-based evaluation** |
 
 ### Knockout Conditions
 
-An application can be rejected regardless of its numerical score when:
+An application can be rejected regardless of its numerical score if the candidate does not satisfy mandatory requirements.
 
-- The candidate is not comfortable with the working hours or stipend.
-- The candidate is not comfortable with the location, unless the role is remote.
-- The candidate's committed duration is shorter than the internship duration.
+Examples include:
 
-### Shortlisting Rules
+- Candidate is not comfortable with the required working hours or stipend.
+- Candidate is not comfortable with the location, unless the opportunity is remote.
+- Candidate's committed duration is shorter than the internship duration.
 
-| Evaluation | Outcome |
+### Evaluation Outcomes
+
+| Condition | Outcome |
 |---|---|
-| Score at or above threshold | Shortlisted |
-| Up to 15 points below threshold | Under HR Review |
-| More than 15 points below threshold | Not Shortlisted |
-| Knockout condition | Not Shortlisted |
+| Score meets or exceeds the configured threshold | Shortlisted |
+| Score is within 15 points below the threshold | Under HR Review |
+| Score is below the review range | Not Shortlisted |
+| Mandatory knockout condition is triggered | Not Shortlisted |
 
-HR can manually override application decisions.
-
-**Important:** The current scoring mechanism uses keyword matching and predefined rules. It is not an AI-based resume evaluation model.
+HR users can manually review and override application decisions where supported by the application.
 
 ---
 
 ## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 |
-| Build Tool | Vite |
-| Programming Language | JavaScript |
-| Backend | Python 3.12 |
-| Backend Framework | FastAPI |
-| ORM | SQLAlchemy |
-| ASGI Server | Uvicorn |
-| Database | SQLite |
-| Resume Parsing | pypdf |
-| Question Parsing | PDF, TXT and CSV |
-| Voice Input | Browser Web Speech API |
-| Authentication | Bearer Token |
-| Email Service | SMTP |
-| Video Conferencing | Jitsi Meet |
-| Calendar Invitation | ICS Calendar File |
+| Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | React 18 | User interface |
+| Build Tool | Vite | Frontend development and build |
+| Styling | CSS | Application styling |
+| Backend | Python 3.12 | Backend programming language |
+| API Framework | FastAPI | REST API |
+| ORM | SQLAlchemy | Database interaction |
+| Server | Uvicorn | ASGI application server |
+| Database | SQLite | Local application database |
+| PDF Processing | pypdf | Resume and question extraction |
+| Email | SMTP | Email notifications |
+| Calendar | iCalendar `.ics` | Interview calendar invitations |
+| Video Meetings | Jitsi Meet | Interview meeting links |
+| Voice Input | Web Speech API | Optional browser voice input |
+| Frontend Hosting | Vercel | Frontend deployment |
+| Backend Hosting | Render | Backend deployment |
 
 ---
 
@@ -430,53 +480,54 @@ HR can manually override application decisions.
 Hr_System/
 │
 ├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── database.py
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   ├── security.py
+│   │   ├── scoring.py
+│   │   ├── services.py
+│   │   ├── questions.py
+│   │   ├── email_service.py
+│   │   ├── qparse.py
+│   │   │
+│   │   └── routers/
+│   │       ├── auth.py
+│   │       ├── jobs.py
+│   │       ├── applications.py
+│   │       ├── notifications.py
+│   │       ├── tests.py
+│   │       └── qupload.py
 │   │
+│   ├── uploads/
 │   ├── requirements.txt
 │   ├── .env.example
-│   ├── hr.db
-│   │
-│   └── app/
-│       ├── main.py
-│       ├── database.py
-│       ├── models.py
-│       ├── schemas.py
-│       ├── security.py
-│       ├── scoring.py
-│       ├── services.py
-│       ├── questions.py
-│       ├── email_service.py
-│       ├── qparse.py
-│       │
-│       └── routers/
-│           ├── auth.py
-│           ├── jobs.py
-│           ├── applications.py
-│           ├── notifications.py
-│           ├── tests.py
-│           └── qupload.py
+│   └── hr.db
 │
 ├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Auth.jsx
+│   │   │   ├── StudentDashboard.jsx
+│   │   │   ├── HrDashboard.jsx
+│   │   │   ├── ApplyForm.jsx
+│   │   │   ├── TestManager.jsx
+│   │   │   ├── TestRunner.jsx
+│   │   │   └── Notifications.jsx
+│   │   │
+│   │   ├── main.jsx
+│   │   ├── App.jsx
+│   │   ├── api.js
+│   │   ├── ui.js
+│   │   └── styles.css
 │   │
-│   ├── package.json
-│   ├── vite.config.js
 │   ├── index.html
-│   │
-│   └── src/
-│       ├── main.jsx
-│       ├── App.jsx
-│       ├── api.js
-│       ├── ui.js
-│       ├── styles.css
-│       │
-│       └── components/
-│           ├── Auth.jsx
-│           ├── StudentDashboard.jsx
-│           ├── HrDashboard.jsx
-│           ├── ApplyForm.jsx
-│           ├── TestManager.jsx
-│           ├── TestRunner.jsx
-│           └── Notifications.jsx
+│   ├── package.json
+│   └── vite.config.js
 │
+├── .gitignore
 └── README.md
 ```
 
@@ -486,51 +537,68 @@ Hr_System/
 
 ### Prerequisites
 
-Install the following before running the application:
+Install the following before running the project:
 
-- Python 3.10 or later
-- Node.js 18 or later
-- npm
-- Git (optional)
+- Python 3.12 or later.
+- Node.js and npm.
+- Git.
+- A code editor such as Visual Studio Code.
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
-```powershell
-git clone <your-repository-url>
-cd Hr_System
+```bash
+git clone https://github.com/Mysteriousboy727/Hr_Evaluator.git
+
+cd Hr_Evaluator
 ```
 
 ### 2. Backend Setup
 
-Open PowerShell in the project directory.
+Open a terminal inside the project directory.
 
 ```powershell
 cd backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-Set-ExecutionPolicy -Scope Process Bypass
-.\venv\Scripts\Activate.ps1
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create environment configuration
-Copy-Item .env.example .env
-
-# Start FastAPI server
-python -m uvicorn app.main:app --reload --port 8000
 ```
 
-Backend URL:
+Create a Python virtual environment:
+
+```powershell
+python -m venv venv
+```
+
+Activate the virtual environment:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+Install backend dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+Create the environment file:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Update the `.env` file with your local configuration.
+
+Start the FastAPI server:
+
+```powershell
+uvicorn app.main:app --reload
+```
+
+Backend server:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-API documentation:
+Swagger documentation:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -538,165 +606,355 @@ http://127.0.0.1:8000/docs
 
 ### 3. Frontend Setup
 
-Open a second PowerShell terminal.
+Open another terminal:
 
 ```powershell
-cd C:\Users\soumy\OneDrive\Desktop\Hr_System\frontend
+cd frontend
+```
 
-# Install dependencies
+Install dependencies:
+
+```powershell
 npm install
+```
 
-# Start Vite development server
+Start the Vite development server:
+
+```powershell
 npm run dev
 ```
 
-Frontend URL:
+Frontend application:
 
 ```text
 http://localhost:5173
 ```
 
-### 4. Environment Configuration
+### 4. Run Both Applications
 
-Configure the following variables in `backend/.env`.
+Keep the backend and frontend terminals running simultaneously.
+
+| Service | Local URL |
+|---|---|
+| React frontend | http://localhost:5173 |
+| FastAPI backend | http://127.0.0.1:8000 |
+| Swagger documentation | http://127.0.0.1:8000/docs |
+
+---
+
+## Environment Variables
+
+Create a `.env` file inside the `backend/` directory.
+
+Example:
 
 ```env
-HR_SIGNUP_CODE=your_secure_signup_code
+# HR registration protection
+HR_SIGNUP_CODE=your_private_signup_code
 
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASSWORD=
-FROM_EMAIL=
+# SMTP configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+FROM_EMAIL=your_email@gmail.com
+
+# Add other variables required by your backend here.
 ```
+
+### Environment Variable Description
 
 | Variable | Description |
 |---|---|
-| HR_SIGNUP_CODE | Signup code required for HR registration |
-| SMTP_HOST | SMTP server hostname |
-| SMTP_PORT | SMTP server port |
-| SMTP_USER | SMTP account username |
-| SMTP_PASSWORD | SMTP account password |
-| FROM_EMAIL | Sender email address |
+| `HR_SIGNUP_CODE` | Private code required for HR registration |
+| `SMTP_HOST` | SMTP server hostname |
+| `SMTP_PORT` | SMTP server port |
+| `SMTP_USER` | SMTP account username |
+| `SMTP_PASSWORD` | SMTP password or application password |
+| `FROM_EMAIL` | Sender email address |
 
-If SMTP is not configured, email messages are printed in the backend terminal rather than sent.
+> Never commit your `.env` file, SMTP credentials, database files, or private signup code to GitHub. Keep `.env.example` in the repository with placeholder values only.
 
-**Security:** Do not commit `.env` files, passwords, database files, or uploaded resumes to GitHub.
+---
+
+## Deployment
+
+The current application uses the following hosting arrangement:
+
+```mermaid
+flowchart TB
+    USER["Users - Browser"]
+    FRONTEND["React + Vite<br/>Vercel"]
+    BACKEND["FastAPI<br/>Render"]
+    DATABASE[("SQLite<br/>Current database")]
+    EMAIL["SMTP Email"]
+    VIDEO["Jitsi Meet"]
+
+    USER --> FRONTEND
+    FRONTEND -->|"HTTPS REST API"| BACKEND
+    BACKEND --> DATABASE
+    BACKEND --> EMAIL
+    BACKEND --> VIDEO
+```
+
+### Frontend Deployment - Vercel
+
+1. Push the project to GitHub.
+2. Open Vercel.
+3. Import the GitHub repository.
+4. Set the root directory to `frontend`.
+5. Select Vite as the framework.
+6. Configure the build command:
+
+```bash
+npm run build
+```
+
+7. Configure the output directory:
+
+```text
+dist
+```
+
+8. Add the backend API URL as a frontend environment variable if the frontend uses it:
+
+```env
+VITE_API_BASE_URL=https://hr-evaluator-api.onrender.com
+```
+
+9. Deploy the application.
+
+Ensure `frontend/src/api.js` actually reads `import.meta.env.VITE_API_BASE_URL` and constructs API requests using that value.
+
+### Backend Deployment - Render
+
+1. Open Render.
+2. Create a new Web Service.
+3. Connect the GitHub repository.
+4. Set the root directory to `backend`.
+5. Configure the build command:
+
+```bash
+pip install -r requirements.txt
+```
+
+6. Configure the start command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+7. Add the required environment variables in Render.
+8. Deploy the backend.
+
+### Important Production Database Note
+
+The current project uses SQLite (`hr.db`). A local SQLite database or upload directory on an ephemeral hosting filesystem should not be treated as durable production storage.
+
+For a production deployment, plan to migrate to:
+
+- Managed PostgreSQL for application data.
+- Private object storage, such as Amazon S3, for uploaded resumes.
+- Database backups and a migration strategy.
+- HTTPS and restricted CORS configuration.
+
+Adding a PostgreSQL connection string alone does not migrate existing SQLite records. The database models, connection configuration, driver, schema, and existing data must be handled as part of the migration.
+
+### Deployment URLs
+
+```text
+Frontend:
+https://akshara-hiring.vercel.app
+
+Backend:
+https://hr-evaluator-api.onrender.com
+
+Swagger:
+https://hr-evaluator-api.onrender.com/docs
+```
 
 ---
 
 ## Test Question Format
 
-HR can upload screening questions through PDF, TXT, or CSV files.
+The platform supports screening-question uploads in the formats implemented by the question parser.
 
-### TXT Example
+### Example CSV
+
+```csv
+question,option_a,option_b,option_c,option_d,correct_answer
+What is Python?,Programming Language,Database,Operating System,Browser,A
+Which data structure uses FIFO?,Stack,Queue,Tree,Graph,B
+What does SQL stand for?,Structured Query Language,Simple Query Language,System Query Language,Sequential Query Language,A
+```
+
+### Example TXT
 
 ```text
-1. Which keyword defines a function in Python?
-
-A) def
-B) func
-C) function
-D) lambda
-
+Q: What is Python?
+A: Programming Language
+B: Database
+C: Operating System
+D: Browser
 Answer: A
 
-2. Which data structure follows FIFO?
-
-A) Stack
-B) Queue
-C) Tree
-D) Graph
-
+Q: Which data structure uses FIFO?
+A: Stack
+B: Queue
+C: Tree
+D: Graph
 Answer: B
-
-3. Which language is commonly used for frontend development?
-
-A) HTML
-B) SQL
-C) C
-D) Bash
-
-Answer: A
 ```
 
-### CSV Format
-
-The CSV file should contain the following columns:
-
-```csv
-question,option_a,option_b,option_c,option_d,correct
-```
-
-Example:
-
-```csv
-"Which keyword defines a function in Python?","def","func","function","lambda","A"
-"Which data structure follows FIFO?","Stack","Queue","Tree","Graph","B"
-```
-
-A minimum of three questions is required before the assessment can be made available to shortlisted candidates.
+> The exact CSV column names and TXT parsing rules must match the implementation in `backend/app/qparse.py`. Check that file before preparing bulk uploads.
 
 ---
 
 ## API Overview
 
-The following table lists the documented API endpoints.
+The backend exposes REST endpoints through FastAPI.
 
-| Module | Method | Endpoint |
+The following is a high-level overview of the application's API routes.
+
+### Authentication
+
+| Method | Endpoint | Description |
 |---|---|---|
-| Authentication | POST | `/api/auth/register` |
-| Authentication | POST | `/api/auth/login` |
-| Authentication | GET | `/api/auth/me` |
-| Jobs | GET | `/api/jobs` |
-| Jobs | POST | `/api/jobs` |
-| Jobs | POST | `/api/jobs/{id}/close` |
-| Slots | GET/POST | `/api/jobs/{id}/slots` |
-| Applications | POST | `/api/jobs/{id}/apply` |
-| Applications | GET | `/api/my/applications` |
-| Applications | GET | `/api/jobs/{id}/applications` |
-| Applications | POST | `/api/applications/{id}/decision` |
-| Applications | POST | `/api/applications/{id}/confirm` |
-| Tests | GET | `/api/jobs/{id}/test` |
-| Tests | POST | `/api/jobs/{id}/test/questions` |
-| Tests | POST | `/api/jobs/{id}/test/upload-file` |
-| Tests | POST | `/api/applications/{id}/test/start` |
-| Tests | POST | `/api/applications/{id}/test/submit` |
-| Notifications | GET | `/api/notifications` |
-| Notifications | POST | `/api/notifications/read` |
+| POST | `/api/auth/register` | Register a student or HR account |
+| POST | `/api/auth/login` | Authenticate a user |
+| GET | `/api/auth/me` | Get the authenticated user |
+
+### Jobs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/jobs` | Retrieve available jobs |
+| POST | `/api/jobs` | Create a job |
+| GET | `/api/jobs/{id}` | Retrieve job details, if implemented |
+| PUT/PATCH | `/api/jobs/{id}` | Update a job, if implemented |
+
+### Applications
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/jobs/{id}/apply` | Submit an application |
+| GET | `/api/my/applications` | Retrieve the student's applications |
+| GET | `/api/jobs/{id}/applications` | Retrieve applications for a job |
+| POST | `/api/applications/{id}/decision` | Update an application decision |
+| POST | `/api/applications/{id}/confirm` | Confirm an application or interview, as implemented |
+
+### Screening Tests
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/jobs/{id}/test` | Retrieve test configuration |
+| GET | `/api/jobs/{id}/test/questions` | Retrieve test questions |
+| POST | `/api/jobs/{id}/test/upload-file` | Upload test questions |
+| POST | `/api/applications/{id}/test/start` | Start a screening test |
+| POST | `/api/applications/{id}/test/submit` | Submit test answers |
+
+### Notifications
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/notifications` | Retrieve notifications |
+| POST | `/api/notifications/read` | Mark notifications as read |
+
+### API Documentation
+
+Explore the interactive Swagger documentation:
+
+https://hr-evaluator-api.onrender.com/docs
+
+> The route list is an overview based on the documented application endpoints. The running FastAPI application and its Swagger schema are the source of truth for supported methods, request bodies, and response formats.
+
+---
+
+## Security Considerations
+
+For a production deployment, the following practices should be followed:
+
+- Store passwords as secure password hashes.
+- Keep authentication secrets and credentials in environment variables.
+- Never expose SMTP credentials or HR signup codes in frontend code.
+- Validate uploaded resume and question files.
+- Restrict upload file types and file sizes.
+- Protect HR-only endpoints with role-based authorization.
+- Ensure students can access only their own applications and results.
+- Avoid exposing correct test answers before submission.
+- Validate test duration and submission deadlines on the server.
+- Use HTTPS for all production traffic.
+- Configure CORS to allow only trusted frontend origins.
+- Store resumes in private storage and restrict access to authorized users.
+- Back up the production database regularly.
+- Define a retention policy for resumes and candidate information.
 
 ---
 
 ## Known Limitations
 
-- Application scoring is keyword-based and should be treated as an initial screening mechanism, not a replacement for HR judgement.
-- Interview scheduling uses Jitsi meeting links rather than a built-in video conferencing system.
-- The application does not currently provide assessment proctoring.
-- Password reset, interview rescheduling, and login token expiry are not implemented in the documented feature set.
-- SQLite and local file storage are suitable for development and demonstrations, but larger deployments should consider PostgreSQL and cloud-based file storage.
+- Application scoring is rule-based and does not use an AI model.
+- Resume evaluation depends on extracted text and configured keywords.
+- SQLite is suitable for local development and demonstrations, but managed database storage is preferable for production.
+- Local file uploads require persistent storage or migration to object storage in a production environment.
+- Jitsi meeting links provide video-call access; they do not represent a custom-built video conferencing infrastructure.
+- Browser voice input depends on browser support and user permissions.
 - Email delivery depends on valid SMTP configuration.
-- Browser voice input depends on Web Speech API support and browser permissions.
+- Render free instances may experience cold starts after inactivity.
+- Automated interview scheduling depends on the availability of configured HR slots.
 
 ---
 
-## Future Enhancements
+## Future Improvements
 
-Potential improvements include:
+- Migrate from SQLite to PostgreSQL.
+- Move resume storage to private cloud object storage.
+- Integrate an embedded video interview SDK.
+- Add secure interview-room access and participant authentication.
+- Introduce AI-assisted resume analysis with explainable scoring.
+- Add advanced candidate filtering and analytics.
+- Add interview feedback and evaluation forms.
+- Implement automated interview reminders and scheduling improvements.
+- Add comprehensive audit logs.
+- Add automated backend and frontend tests.
+- Implement CI/CD workflows using GitHub Actions.
+- Add monitoring, logging, and error tracking.
 
-- AI-assisted resume analysis and semantic skill matching.
-- Advanced candidate ranking and analytics.
-- Interview feedback and evaluation dashboards.
-- Assessment proctoring and anti-cheating measures.
-- Password recovery and multi-factor authentication.
-- Interview rescheduling and calendar synchronization.
-- PostgreSQL database migration.
-- Cloud-based resume and document storage.
-- Role-based analytics for HR teams.
+---
+
+## Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Test your changes locally.
+5. Submit a pull request.
+
+```bash
+git checkout -b feature/your-feature-name
+
+git add .
+
+git commit -m "Add: your feature description"
+
+git push origin feature/your-feature-name
+```
 
 ---
 
 ## Author
 
-**Hr_Evaluator — Online Internship Recruitment and Evaluation Platform**
+**Hr_Evaluator**
 
-Built using React, FastAPI, Python, and SQLite.
+An internship recruitment and evaluation platform built with React, FastAPI, and SQLAlchemy.
+
+**Repository:**  
+https://github.com/Mysteriousboy727/Hr_Evaluator
+
+---
+
+<p align="center">
+  Built to simplify internship recruitment, candidate evaluation, and interview scheduling.
+</p>
