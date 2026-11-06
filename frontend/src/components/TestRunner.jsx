@@ -51,7 +51,7 @@ export default function TestRunner({ app, onDone }) {
         <p>You scored <b>{result.percent}%</b> ({result.correct}/{result.total} correct).
           {result.late ? " Your time had expired, so your answers were not counted." : ""}</p>
         <p>{result.passed
-          ? "You passed. Your interview call has been booked, or will be booked as soon as HR adds a slot. Check My applications."
+          ? "You passed. Open My applications for your next step (the AI interview, or your interview booking)."
           : "You did not reach the pass mark this time. HR may still review your application."}</p>
         <button onClick={onDone}>Back to my applications</button>
       </div>

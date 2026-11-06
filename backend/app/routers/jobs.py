@@ -24,7 +24,7 @@ def _job_out(j, db, user):
     if user.role == "hr":
         apps = db.query(Application).filter(Application.job_id == j.id).all()
         d["applicants"] = len(apps)
-        d["shortlisted"] = sum(1 for a in apps if a.status.startswith(("Shortlisted", "Test Pending", "Test Passed", "Interview")))
+        d["shortlisted"] = sum(1 for a in apps if a.status.startswith(("Shortlisted", "Test Pending", "Test Passed", "AI Interview", "Interview")))
         d["free_slots"] = db.query(Slot).filter(Slot.job_id == j.id, Slot.application_id.is_(None),
                                                 Slot.start > now_ist()).count()
     else:

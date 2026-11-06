@@ -120,7 +120,7 @@ def decide(app_id: int, p: DecisionIn, db: Session = Depends(get_db), hr: User =
     a, job = _owned(db, app_id, hr)
     student = db.get(User, a.student_id)
     if p.decision == "shortlist":
-        if a.status not in ("Under HR Review", "Not Shortlisted", "Rejected by HR", "Test Failed"):
+        if a.status not in ("Under HR Review", "Not Shortlisted", "Rejected by HR", "Test Failed", "AI Interview Pending"):
             raise HTTPException(400, f"Already: {a.status}")
         shortlist(db, a)
     else:

@@ -3,12 +3,14 @@ import { api } from "../api";
 import { badgeTone } from "../ui.js";
 import ApplyForm from "./ApplyForm.jsx";
 import TestRunner from "./TestRunner.jsx";
+import InterviewRunner from "./InterviewRunner.jsx";
 
 export default function StudentDashboard() {
   const [jobs, setJobs] = useState([]);
   const [apps, setApps] = useState([]);
   const [applying, setApplying] = useState(null);
   const [testing, setTesting] = useState(null);
+  const [interviewing, setInterviewing] = useState(null);
   const [err, setErr] = useState("");
 
   const load = () => {
@@ -21,6 +23,7 @@ export default function StudentDashboard() {
     try { await api.confirm(id); load(); } catch (e) { setErr(e.message); }
   }
 
+  if (interviewing) return <InterviewRunner app={interviewing} onDone={() => { setInterviewing(null); load(); }} />;
   if (testing) return <TestRunner app={testing} onDone={() => { setTesting(null); load(); }} />;
   if (applying) return <ApplyForm job={applying} onDone={() => { setApplying(null); load(); }} onCancel={() => setApplying(null)} />;
 
@@ -43,6 +46,7 @@ export default function StudentDashboard() {
             </div>
             <div>
               {a.status === "Test Pending" && <button onClick={() => setTesting(a)}>Take test</button>}
+              {a.status === "AI Interview Pending" && <button onClick={() => setInterviewing(a)}>Start AI interview</button>}
               {a.status === "Interview Scheduled" && <button onClick={() => confirm(a.id)}>Confirm attendance</button>}
             </div>
           </div>

@@ -105,3 +105,21 @@ class TestAttempt(Base):
     total = Column(Integer, default=0)
     percent = Column(Float, default=0)
     passed = Column(Boolean, default=False)
+
+class InterviewSession(Base):
+    __tablename__ = "interview_sessions"
+    id = Column(Integer, primary_key=True, index=True)
+    application_id = Column(Integer, ForeignKey("applications.id"), unique=True, index=True)
+    language = Column(String, default="en")
+    consent = Column(Boolean, default=False)
+    status = Column(String, default="active")  # active | done
+    turns = Column(JSON, default=list)
+    summary = Column(JSON, default=dict)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    ended_at = Column(DateTime, nullable=True)
+
+class JobProfile(Base):
+    __tablename__ = "job_profiles"
+    job_id = Column(Integer, ForeignKey("jobs.id"), primary_key=True)
+    role_type = Column(String, default="tech")  # tech | non_tech
+    focus = Column(String, default="")

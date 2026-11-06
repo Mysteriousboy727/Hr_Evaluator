@@ -7,7 +7,7 @@ from ..database import get_db
 from ..models import Application, Job, Question, TestAttempt, User
 from ..schemas import QuestionIn, SubmitIn, TestConfigIn
 from ..security import require_role
-from ..services import MIN_QUESTIONS, TEST_PENDING, get_cfg, notify, pass_test, release_waiting
+from ..services import MIN_QUESTIONS, TEST_PENDING, get_cfg, notify, pass_test, after_test, release_waiting
 
 router = APIRouter(tags=["tests"])
 
@@ -177,7 +177,7 @@ def submit_test(app_id: int, p: SubmitIn, db: Session = Depends(get_db),
     att.submitted_at = datetime.utcnow()
     att.correct, att.total, att.percent, att.passed = correct, total, percent, passed
     if passed:
-        pass_test(db, a)
+        after_test(db, a)
     else:
         a.status = "Test Failed"
         notify(db, student, f"Test result - {job.title}",

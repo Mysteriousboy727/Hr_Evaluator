@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine, SessionLocal
 from .models import Application, Job, User
-from .routers import auth, jobs, applications, notifications, tests, qupload
+from .routers import auth, jobs, applications, notifications, tests, qupload, interview
 from .services import now_ist, notify, BOOKED
 
 Base.metadata.create_all(bind=engine)
@@ -55,7 +55,7 @@ async def lifespan(app):
 app = FastAPI(title="Akshara Hiring", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
                    allow_methods=["*"], allow_headers=["*"])
-for r in (auth.router, jobs.router, applications.router, notifications.router, tests.router, qupload.router):
+for r in (auth.router, jobs.router, applications.router, notifications.router, tests.router, qupload.router, interview.router):
     app.include_router(r, prefix="/api")
 
 

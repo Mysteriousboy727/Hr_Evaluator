@@ -5,3 +5,4 @@ pydantic[email]
 python-dotenv
 python-multipart
 pypdf
+anthropic

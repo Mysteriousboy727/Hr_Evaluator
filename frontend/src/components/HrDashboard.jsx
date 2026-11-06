@@ -1,6 +1,8 @@
 import { Fragment, useEffect, useState } from "react";
 import { api } from "../api";
 import TestManager from "./TestManager.jsx";
+import AiInterviewView from "./AiInterviewView.jsx";
+import InterviewSettings from "./InterviewSettings.jsx";
 import { badgeTone } from "../ui.js";
 
 const emptyJob = { title: "", description: "", required_skills: "", location: "", work_mode: "onsite", stipend: "", duration_months: 3, threshold: 60 };
@@ -57,6 +59,7 @@ function JobPanel({ job, onChange }) {
   const [slots, setSlots] = useState([]);
   const [apps, setApps] = useState([]);
   const [open, setOpen] = useState(null);
+  const [ai, setAi] = useState(null);
   const [rng, setRng] = useState({ date: "", from: "10:00", to: "13:00" });
   const [msg, setMsg] = useState("");
 
@@ -80,6 +83,7 @@ function JobPanel({ job, onChange }) {
   return (
     <div className="card">
       <h3>{job.title} - applicants</h3>
+      <InterviewSettings job={job} />
       <TestManager job={job} />
       <h4>Interview slots (30 min each, IST)</h4>
       <div className="grid">
@@ -109,7 +113,8 @@ function JobPanel({ job, onChange }) {
                 <td>
                   <button onClick={() => setOpen(open === a.id ? null : a.id)}>Details</button>{" "}
                   <button onClick={() => api.resume(a.id).catch((e) => setMsg(e.message))}>Resume</button>{" "}
-                  {["Under HR Review", "Not Shortlisted", "Rejected by HR", "Test Failed"].includes(a.status) &&
+                  <button onClick={() => setAi(ai === a.id ? null : a.id)}>AI interview</button>{" "}
+                  {["Under HR Review", "Not Shortlisted", "Rejected by HR", "Test Failed", "AI Interview Pending"].includes(a.status) &&
                     <button onClick={() => decide(a.id, "shortlist")}>Shortlist</button>}{" "}
                   {a.status !== "Rejected by HR" && <button className="danger" onClick={() => decide(a.id, "reject")}>Reject</button>}
                 </td>
@@ -132,6 +137,7 @@ function JobPanel({ job, onChange }) {
         </tbody>
       </table>
       {apps.length === 0 && <p className="muted">No applications yet.</p>}
+      {ai && <AiInterviewView appId={ai} />}
     </div>
   );
 }

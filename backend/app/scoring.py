@@ -1,7 +1,7 @@
 import re
 from pypdf import PdfReader
 
-QUALITY_KEYWORDS = ["project", "intern", "github", "experience", "education", "certif", "hackathon"]
+QUALITY_KEYWORDS = ["project", "intern", "github", "experience", "education", "certif", "hackathon", "sales", "marketing", "customer", "communication", "leadership", "campaign", "volunteer", "event", "team"]
 
 
 def extract_resume_text(path: str) -> str:

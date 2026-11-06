@@ -132,3 +132,24 @@ def fill_pending(db, job_id):
         slot = _find_slot(db, a)
         if slot:
             book(db, a, slot)
+
+AI_PENDING = "AI Interview Pending"
+
+
+def ai_enabled():
+    import os
+    return bool(os.getenv("ANTHROPIC_API_KEY")) and os.getenv("AI_INTERVIEW", "on").lower() != "off"
+
+
+def after_test(db, app):
+    """Called when a candidate passes the test: AI interview first (if enabled), else book the slot."""
+    if not ai_enabled():
+        pass_test(db, app)
+        return
+    job = db.get(Job, app.job_id)
+    app.status = AI_PENDING
+    notify(db, db.get(User, app.student_id), f"Next step: AI interview - {job.title}",
+           "You cleared the test. Next is a short AI-led interview in the language of your choice "
+           "(about 10 minutes). Log in, open My applications and click Start AI interview. "
+           "Your call with HR is booked after it.")
+    db.flush()
